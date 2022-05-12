@@ -13,7 +13,6 @@ struct PreferenceView: View {
     @Preference(\.refreshInterval) var refreshInterval
     @Preference(\.selectedState) var selectedState
     
-    
     var body: some View {
         Spacer()
         VStack(alignment: .leading) {

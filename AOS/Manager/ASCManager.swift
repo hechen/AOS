@@ -13,27 +13,28 @@ import Combine
  */
 class ASCManager: NSObject {
     @objc dynamic var offices = [ASC]()
-    @Published var loading: Bool = false
+    
+    // for lazy read
+    private(set) var loading: Bool = false
     
     var timerCancellable: AnyCancellable?
     var autoRefresh: AnyCancellable?
     var subscriptions = Set<AnyCancellable>()
     
     var nearestTimeslot: Date? {
-        offices.flatMap(\.timeSlots).map(\.dates).reduce([], +).first
+        offices.flatMap(\.timeSlots).map(\.dates).reduce([], +).sorted(by: <).first
     }
     
     let reminder = Reminder()
-    
     override init() {
         super.init()
         
         Preferences.standard
             .preferencesChangedSubject
             .filter { changedKeyPath in
-                changedKeyPath == \Preferences.autoRefreshEnabled
-                || changedKeyPath == \Preferences.refreshInterval
-            }.sink { _ in
+                changedKeyPath == \Preferences.autoRefreshEnabled || changedKeyPath == \Preferences.refreshInterval
+            }
+            .sink { _ in
                 if Preferences.standard.autoRefreshEnabled {
                     self.startTimer()
                 } else {
@@ -41,13 +42,20 @@ class ASCManager: NSObject {
                 }
             }
             .store(in: &subscriptions)
+        
+        Preferences.standard.preferencesChangedSubject.filter {
+            $0 == \Preferences.selectedState
+        }
+        .sink { [weak self] _ in
+            self?.refreshOffices()
+        }
+        .store(in: &subscriptions)
     }
     
     // MARK: - Timer
     func startTimer() {
+        // in case timer is running.
         stopTimer()
-        
-        print("Start Timer...")
         let interval = max(Preferences.standard.refreshInterval.timeInterval, 10 * 60)
         timerCancellable = Timer.publish(every: interval, tolerance: 0.5, on: .current, in: .common)
             .autoconnect()
@@ -56,7 +64,6 @@ class ASCManager: NSObject {
             }
     }
     func stopTimer() {
-        print("Stop Timer...")
         timerCancellable?.cancel()
         timerCancellable = nil
     }
@@ -70,7 +77,15 @@ class ASCManager: NSObject {
         let urlString = "https://my.uscis.gov/appointmentscheduler-appointment/field-offices/state/" + state
         var request = URLRequest(url: URL(string: urlString)!)
         request.httpMethod = "GET"
+        
         URLSession.shared.dataTaskPublisher(for: request)
+            .handleEvents(receiveSubscription: { [weak self] _ in
+                self?.loading = true
+            }, receiveCompletion: { [weak self] _ in
+                self?.loading = false
+            }, receiveCancel: { [weak self] in
+                self?.loading = false
+            })
             .map(\.data)
             .decode(type: [ASC].self, decoder: JSONDecoder())
             .sink(receiveCompletion: { completion in

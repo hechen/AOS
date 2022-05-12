@@ -7,13 +7,15 @@
 
 import Foundation
 
-enum Frequency: String, Codable, CaseIterable, Identifiable {
+enum Frequency: String, Codable, CaseIterable {
     case tenMinutes
     case halfHour
     case hour
     case threeHours
     case day
-    
+}
+
+extension Frequency {
     var timeInterval: TimeInterval {
         switch self {
         case .tenMinutes: return 10*60
@@ -23,9 +25,6 @@ enum Frequency: String, Codable, CaseIterable, Identifiable {
         case .day: return 12*60*60
         }
     }
-    var id: Self { self }
-}
-extension Frequency {
     var timeDesc: String {
         switch self {
         case .tenMinutes: return "10 Minutes"
@@ -35,4 +34,7 @@ extension Frequency {
         case .day: return "Every Day"
         }
     }
+}
+extension Frequency: Identifiable {
+    var id: Self { self }
 }
