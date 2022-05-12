@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
     </dependencies>
     <scenes>
@@ -21,12 +22,14 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                                        <menuItem title="Refresh" keyEquivalent="r" id="6zr-UV-3ru">
+                                        <menuItem title="Refresh" id="6zr-UV-3ru">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="didClickRefresh:" target="Voe-Tx-rLC" id="elD-NP-YmK"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Preferences" keyEquivalent="," id="h0B-rZ-MKd">
+                                        <menuItem title="Preferences" id="h0B-rZ-MKd">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="didClickPreferences:" target="Voe-Tx-rLC" id="lG1-Vx-ZOu"/>
                                             </connections>

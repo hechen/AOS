@@ -7,6 +7,7 @@
 
 import Cocoa
 import SwiftUI
+import Combine
 import LaunchAtLogin
 
 @main
@@ -28,7 +29,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         menuManager = MenuManager(statusMenu: statusMenu)
         statusMenu.delegate = menuManager
+        
+        menuManager?.ascManager.publisher(for: \.offices)
+            .eraseToAnyPublisher()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateMenuItems()
+            }
+            .store(in: &subscriptions)
+        
+        // first time, load data
+        menuManager?.ascManager.refreshOffices()
     }
+    var subscriptions = Set<AnyCancellable>()
+    
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
@@ -39,7 +53,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func didClickRefresh(_ sender: Any) {
-        menuManager?.ascManager.refresh()
+        menuManager?.ascManager.refreshOffices()
     }
     
     @IBAction func didClickPreferences(_ sender: Any) {
@@ -54,10 +68,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func updateMenuItems() {
-        guard menuManager?.menuIsOpen == true else {
+        guard let menuManager = menuManager else {
             return
-        }        
-        menuManager?.updateMenuItems()
+        }
+        
+        // update menu bar button
+        var title = "AOS - "
+        if menuManager.ascManager.offices.isEmpty {
+            title += "No Available Offices"
+        } else {
+            let date = menuManager.ascManager.nearestTimeslot ?? Date()
+            title += "\(menuManager.ascManager.offices.count) Offices, Nearest time is \(Self.dateFormatter.string(from: date))"
+        }
+        
+        statusItem?.button?.title = title
+        guard menuManager.menuIsOpen else {
+            return
+        }
+        menuManager.updateMenuItems()
     }
+    
+    static let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd HH:mm"
+        return df
+    }()
 }
 

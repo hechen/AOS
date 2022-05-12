@@ -11,7 +11,7 @@ enum Status: String, Codable {
     case ACTIVE
 }
 
-struct ASC: Codable {
+class ASC: NSObject, Codable {
     let assignedServiceCenter: String
     let centerDescription: String
     let status: Status

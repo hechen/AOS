@@ -8,51 +8,93 @@
 import AppKit
 import Combine
 
-class ASCManager {
-    var offices = [ASC]()
+/*
+ You can treat ASCManager as a ViewModel
+ */
+class ASCManager: NSObject {
+    @objc dynamic var offices = [ASC]()
+    @Published var loading: Bool = false
+    
     var timerCancellable: AnyCancellable?
+    var autoRefresh: AnyCancellable?
+    var subscriptions = Set<AnyCancellable>()
     
-    public private(set) var loading: Bool = false
-    
-    init() {
-        if UserDefaults.standard.bool(forKey: "AutoRefresh") == true {
-            startTimer()
-        }
-        refresh()
+    var nearestTimeslot: Date? {
+        offices.flatMap(\.timeSlots).map(\.dates).reduce([], +).first
     }
     
+    let reminder = Reminder()
+    
+    override init() {
+        super.init()
+        
+        Preferences.standard
+            .preferencesChangedSubject
+            .filter { changedKeyPath in
+                changedKeyPath == \Preferences.autoRefreshEnabled
+                || changedKeyPath == \Preferences.refreshInterval
+            }.sink { _ in
+                if Preferences.standard.autoRefreshEnabled {
+                    self.startTimer()
+                } else {
+                    self.stopTimer()
+                }
+            }
+            .store(in: &subscriptions)
+    }
+    
+    // MARK: - Timer
     func startTimer() {
-        let interval = max(UserDefaults.standard.double(forKey: "RefreshInterval"), 30*60)
+        stopTimer()
+        
+        print("Start Timer...")
+        let interval = max(Preferences.standard.refreshInterval.timeInterval, 10 * 60)
         timerCancellable = Timer.publish(every: interval, tolerance: 0.5, on: .current, in: .common)
             .autoconnect()
             .sink { _ in
-                self.refresh()
+                self.refreshOffices()
             }
     }
-    
-    func refresh() {
-        refreshOffices()
+    func stopTimer() {
+        print("Stop Timer...")
+        timerCancellable?.cancel()
+        timerCancellable = nil
     }
     
-    private func refreshOffices() {
-        guard let selectedState = UserDefaults.standard.string(forKey: "SelectedState") else {
+    func refreshOffices() {
+        guard !Preferences.standard.selectedState.isEmpty else {
             return
         }
-        loading = true
-        Network.searchASC(state: selectedState) { offices in
-            self.offices = offices
-            self.loading = false
-            
-            DispatchQueue.main.async {
-                self.updateMenuItems()
-            }
-        }.resume()
+        
+        let state = Preferences.standard.selectedState
+        let urlString = "https://my.uscis.gov/appointmentscheduler-appointment/field-offices/state/" + state
+        var request = URLRequest(url: URL(string: urlString)!)
+        request.httpMethod = "GET"
+        URLSession.shared.dataTaskPublisher(for: request)
+            .map(\.data)
+            .decode(type: [ASC].self, decoder: JSONDecoder())
+            .sink(receiveCompletion: { completion in
+                if case .failure(let err) = completion {
+                    print("Fetch Centers Failed. Error: \(err)")
+                }
+            }, receiveValue: { [weak self] centers in
+                self?.offices = centers
+            })
+            .store(in: &subscriptions)
     }
     
-    // Main Actor
-    private func updateMenuItems() {
-        if let appDelegate = NSApp.delegate as? AppDelegate {
-            appDelegate.updateMenuItems()
+    private func notifyIfNeeded(previous: [ASC], latest: [ASC]) {
+        // the simplest way is to check equality...
+        // we only notify when there are new slots
+        guard !latest.isEmpty else {
+            return
         }
+        
+#if DEBUG
+        // check if user has some specific observation
+        if reminder.newTimeSlotFound() == .alertFirstButtonReturn {
+            NSWorkspace.shared.open(URL(string: "https://my.uscis.gov/appointmentscheduler-appointment/ca/en/office-search")!)
+        }
+#endif
     }
 }

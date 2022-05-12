@@ -11,6 +11,9 @@
 		740B41E0282C6420004F3758 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740B41DE282C6420004F3758 /* Reminder.swift */; };
 		740B41E3282C6D83004F3758 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740B41E2282C6D83004F3758 /* DataStore.swift */; };
 		740B41E5282C7F06004F3758 /* RefreshingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740B41E4282C7F06004F3758 /* RefreshingView.swift */; };
+		740B41E7282CCAF4004F3758 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740B41E6282CCAF4004F3758 /* Preferences.swift */; };
+		740B41EB282D8A59004F3758 /* Frequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740B41EA282D8A59004F3758 /* Frequency.swift */; };
+		74552B39282DA48C00791F95 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 74552B38282DA48C00791F95 /* Credits.html */; };
 		74628F12282C573100A6A638 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 74628F11282C573100A6A638 /* LaunchAtLogin */; };
 		74CD3CD4282C38290031B541 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CD3CD3282C38290031B541 /* AppDelegate.swift */; };
 		74CD3CD8282C382B0031B541 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74CD3CD7282C382B0031B541 /* Assets.xcassets */; };
@@ -18,7 +21,6 @@
 		74CD3CE6282C382B0031B541 /* AOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CD3CE5282C382B0031B541 /* AOSTests.swift */; };
 		74CD3CF0282C382B0031B541 /* AOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CD3CEF282C382B0031B541 /* AOSUITests.swift */; };
 		74CD3CF2282C382B0031B541 /* AOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CD3CF1282C382B0031B541 /* AOSUITestsLaunchTests.swift */; };
-		74CD3D06282C38360031B541 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CD3D01282C38360031B541 /* Network.swift */; };
 		74CD3D07282C38360031B541 /* ASC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CD3D02282C38360031B541 /* ASC.swift */; };
 		74CD3D0B282C3C6C0031B541 /* MenuManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CD3D0A282C3C6C0031B541 /* MenuManager.swift */; };
 		74CD3D0E282C3EC40031B541 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CD3D0D282C3EC40031B541 /* Address.swift */; };
@@ -49,6 +51,9 @@
 		740B41DE282C6420004F3758 /* Reminder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		740B41E2282C6D83004F3758 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		740B41E4282C7F06004F3758 /* RefreshingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshingView.swift; sourceTree = "<group>"; };
+		740B41E6282CCAF4004F3758 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		740B41EA282D8A59004F3758 /* Frequency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Frequency.swift; sourceTree = "<group>"; };
+		74552B38282DA48C00791F95 /* Credits.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
 		74CD3CD0282C38290031B541 /* AOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74CD3CD3282C38290031B541 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74CD3CD7282C382B0031B541 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -59,7 +64,6 @@
 		74CD3CEB282C382B0031B541 /* AOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		74CD3CEF282C382B0031B541 /* AOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOSUITests.swift; sourceTree = "<group>"; };
 		74CD3CF1282C382B0031B541 /* AOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		74CD3D01282C38360031B541 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		74CD3D02282C38360031B541 /* ASC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASC.swift; sourceTree = "<group>"; };
 		74CD3D09282C3B4F0031B541 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		74CD3D0A282C3C6C0031B541 /* MenuManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManager.swift; sourceTree = "<group>"; };
@@ -115,8 +119,8 @@
 		74628F17282C590C00A6A638 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				74CD3D01282C38360031B541 /* Network.swift */,
 				740B41E2282C6D83004F3758 /* DataStore.swift */,
+				740B41E6282CCAF4004F3758 /* Preferences.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -154,6 +158,7 @@
 				74CD3CD7282C382B0031B541 /* Assets.xcassets */,
 				74CD3CD9282C382B0031B541 /* Main.storyboard */,
 				74CD3CDC282C382B0031B541 /* AOS.entitlements */,
+				74552B38282DA48C00791F95 /* Credits.html */,
 			);
 			path = AOS;
 			sourceTree = "<group>";
@@ -181,6 +186,7 @@
 				74CD3D02282C38360031B541 /* ASC.swift */,
 				74CD3D0D282C3EC40031B541 /* Address.swift */,
 				74CD3D0F282C3ED60031B541 /* TimeSlot.swift */,
+				740B41EA282D8A59004F3758 /* Frequency.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -307,6 +313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74CD3CD8282C382B0031B541 /* Assets.xcassets in Resources */,
+				74552B39282DA48C00791F95 /* Credits.html in Resources */,
 				74CD3CDB282C382B0031B541 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,13 +362,14 @@
 			files = (
 				74CD3D0B282C3C6C0031B541 /* MenuManager.swift in Sources */,
 				740B41E0282C6420004F3758 /* Reminder.swift in Sources */,
-				74CD3D06282C38360031B541 /* Network.swift in Sources */,
 				740B41E5282C7F06004F3758 /* RefreshingView.swift in Sources */,
 				74CD3D13282C3FC00031B541 /* OfficeView.swift in Sources */,
 				740B41E3282C6D83004F3758 /* DataStore.swift in Sources */,
+				740B41EB282D8A59004F3758 /* Frequency.swift in Sources */,
 				74CD3CD4282C38290031B541 /* AppDelegate.swift in Sources */,
 				74CD3D07282C38360031B541 /* ASC.swift in Sources */,
 				74CD3D15282C52E00031B541 /* ASCManager.swift in Sources */,
+				740B41E7282CCAF4004F3758 /* Preferences.swift in Sources */,
 				740B41DC282C6113004F3758 /* PreferenceView.swift in Sources */,
 				74CD3D10282C3ED60031B541 /* TimeSlot.swift in Sources */,
 				74CD3D0E282C3EC40031B541 /* Address.swift in Sources */,
@@ -462,7 +470,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -516,7 +524,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -533,7 +541,7 @@
 				CODE_SIGN_ENTITLEMENTS = AOS/AOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = NM8T9PQ2C4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -545,7 +553,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = app.chen.utility.AOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -561,7 +569,7 @@
 				CODE_SIGN_ENTITLEMENTS = AOS/AOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = NM8T9PQ2C4;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -573,7 +581,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = app.chen.utility.AOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -9,17 +9,19 @@ import SwiftUI
 import LaunchAtLogin
 
 struct PreferenceView: View {
-    @AppStorage("SelectedState") var selectedState: String = "Not Set"
-    @AppStorage("AutoRefresh") var enableAutorefresh: Bool = false
-    @AppStorage("RefreshInterval") var refreshInterval: TimeInterval = 30*60
+    @Preference(\.autoRefreshEnabled) var autoRefreshEnabled
+    @Preference(\.refreshInterval) var refreshInterval
+    @Preference(\.selectedState) var selectedState
+    
     
     var body: some View {
         Spacer()
         VStack(alignment: .leading) {
             Spacer()
-            LaunchAtLogin.Toggle()
-            Toggle("Auto Refresh", isOn: $enableAutorefresh)
             
+            LaunchAtLogin.Toggle()
+            
+            Toggle("Auto Refresh", isOn: $autoRefreshEnabled)
             
             Spacer()
             
@@ -29,12 +31,15 @@ struct PreferenceView: View {
                 }
             }
             .frame(width: 200)
+            
             Picker("Frequency: ", selection: $refreshInterval) {
                 ForEach(Frequency.allCases, id: \.id) { freq in
-                    Text(freq.itemDesc).tag(freq.timeInterval)
+                    Text(freq.timeDesc)
+                        .tag(freq)
                 }
             }
             .frame(width: 200)
+            .disabled(!autoRefreshEnabled)
             
             Spacer()
         }

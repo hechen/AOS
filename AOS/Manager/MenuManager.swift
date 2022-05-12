@@ -7,12 +7,39 @@
 
 import AppKit
 
+
+/*
+ Menu Layout
+ ┌────────────────────────┐
+ │ ┌────────────────────┐ │
+ │ │     About AOS      │ │
+ │ └────────────────────┘ │
+ │ ────────────────────── │
+ │                        │
+ │                        │
+ │                        │
+ │                        │
+ │                        │
+ │                        │
+ │ ────────────────────── │
+ │┌─────────────────────┐ │
+ ││       Refresh       │ │
+ │└─────────────────────┘ │
+ │┌─────────────────────┐ │
+ ││     Preferences     │ │
+ │└─────────────────────┘ │
+ │┌─────────────────────┐ │
+ ││       Quit          │ │
+ │└─────────────────────┘ │
+ └────────────────────────┘
+ 
+ */
 class MenuManager: NSObject, NSMenuDelegate {
     let statusMenu: NSMenu
     var menuIsOpen = false
     
     // hard code
-    let itemsBeforeOffices = 2
+    let itemsBeforeOffices = 2          // About, Seperator
     let itemsAfterOffices = 4           // Seperator, Refresh, Preferences, Quit
     
     let ascManager = ASCManager()
@@ -59,13 +86,14 @@ class MenuManager: NSObject, NSMenuDelegate {
             return
         }
         
+        // not loading, there must be no state has been set up.
         guard !ascManager.offices.isEmpty else {
             let item = NSMenuItem()
-            item.title = "Select state first"
+            item.title = "Select State first."
             statusMenu.insertItem(item, at: index)
             return
         }
-                
+        
         let itemFrame = NSRect(x: 0, y: 0, width: 200, height: 40)
         for office in ascManager.offices {
             let item = NSMenuItem()
@@ -78,11 +106,10 @@ class MenuManager: NSObject, NSMenuDelegate {
 
             if !office.timeSlots.isEmpty {
                 item.submenu = NSMenu()
-                
                 for timeslot in office.timeSlots {
                     item.submenu?.addItem(NSMenuItem.separator())
-                    timeslot.times.map { time in
-                        return timeslot.date + " - " + time
+                    timeslot.formattedTimes.map { time in
+                        timeslot.formattedDate + " - " + time
                     }.forEach {
                         let sumMenuItem = NSMenuItem()
                         sumMenuItem.title = $0
