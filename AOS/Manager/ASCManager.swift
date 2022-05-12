@@ -31,37 +31,42 @@ class ASCManager: NSObject {
         
         Preferences.standard
             .preferencesChangedSubject
-            .filter { changedKeyPath in
-                changedKeyPath == \Preferences.autoRefreshEnabled || changedKeyPath == \Preferences.refreshInterval
-            }
-            .sink { _ in
+            .filter { changedKeyPath in changedKeyPath == \Preferences.autoRefreshEnabled }
+            .sink { [weak self] _ in
                 if Preferences.standard.autoRefreshEnabled {
-                    self.startTimer()
+                    self?.startTimer()
                 } else {
-                    self.stopTimer()
+                    self?.stopTimer()
                 }
             }
             .store(in: &subscriptions)
         
-        Preferences.standard.preferencesChangedSubject.filter {
-            $0 == \Preferences.selectedState
-        }
-        .sink { [weak self] _ in
-            self?.refreshOffices()
-        }
-        .store(in: &subscriptions)
+        Preferences.standard.preferencesChangedSubject
+            .filter { changedKeyPath in changedKeyPath == \Preferences.refreshInterval }
+            .throttle(for: .seconds(2), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] _ in
+                self?.startTimer()
+            }
+            .store(in: &subscriptions)
+        
+        Preferences.standard
+            .preferencesChangedSubject
+            .filter { changedKeyPath in changedKeyPath == \Preferences.selectedState }
+            .sink { [weak self] _ in
+                self?.refreshOffices()
+            }
+            .store(in: &subscriptions)
     }
     
     // MARK: - Timer
     func startTimer() {
         // in case timer is running.
         stopTimer()
-        let interval = max(Preferences.standard.refreshInterval.timeInterval, 10 * 60)
-        timerCancellable = Timer.publish(every: interval, tolerance: 0.5, on: .current, in: .common)
-            .autoconnect()
-            .sink { _ in
-                self.refreshOffices()
-            }
+        
+        let interval = TimeInterval(Preferences.standard.refreshInterval) * 60
+        timerCancellable = Timer.publish(every: interval, tolerance: 0.5, on: .current, in: .common).autoconnect().sink { _ in
+            self.refreshOffices()
+        }
     }
     func stopTimer() {
         timerCancellable?.cancel()
@@ -69,12 +74,19 @@ class ASCManager: NSObject {
     }
     
     func refreshOffices() {
-        guard !Preferences.standard.selectedState.isEmpty else {
+        guard !Preferences.standard.selectedState.isEmpty, !Preferences.standard.searchZipCode.isEmpty else {
             return
         }
         
-        let state = Preferences.standard.selectedState
-        let urlString = "https://my.uscis.gov/appointmentscheduler-appointment/field-offices/state/" + state
+        var urlString = ""
+        if !Preferences.standard.searchZipCode.isEmpty {
+            let zipCode = Preferences.standard.searchZipCode
+            urlString = "https://my.uscis.gov/appointmentscheduler-appointment/field-offices/zipcode/\(zipCode)"
+        } else {
+            let state = Preferences.standard.selectedState
+            urlString = "https://my.uscis.gov/appointmentscheduler-appointment/field-offices/state/" + state
+        }
+                
         var request = URLRequest(url: URL(string: urlString)!)
         request.httpMethod = "GET"
         
@@ -98,9 +110,10 @@ class ASCManager: NSObject {
             .store(in: &subscriptions)
     }
     
+    // TODO: add observation
     private func notifyIfNeeded(previous: [ASC], latest: [ASC]) {
         // the simplest way is to check equality...
-        // we only notify when there are new slots
+        
         guard !latest.isEmpty else {
             return
         }

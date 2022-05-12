@@ -12,37 +12,49 @@ struct PreferenceView: View {
     @Preference(\.autoRefreshEnabled) var autoRefreshEnabled
     @Preference(\.refreshInterval) var refreshInterval
     @Preference(\.selectedState) var selectedState
+    @Preference(\.searchZipCode) var searchZipCode
     
     var body: some View {
-        Spacer()
         VStack(alignment: .leading) {
             Spacer()
             
-            LaunchAtLogin.Toggle()
-            
-            Toggle("Auto Refresh", isOn: $autoRefreshEnabled)
+            Group {
+                LaunchAtLogin.Toggle()
+            }
             
             Spacer()
             
-            Picker("Select state: ", selection: $selectedState) {
-                ForEach(Array(DataStore.statesDictionary.keys), id: \.self) { name in
-                    Text(name).tag(DataStore.codeByName(name)!)
+            Group {
+                
+                HStack(alignment: .center, spacing: 5) {
+                    Text("Enter ZIP code:")
+                    TextField("ZIP code", text: $searchZipCode)
                 }
+                
+                Text("OR")
+                
+                Picker("Select state:", selection: $selectedState) {
+                    ForEach(Array(DataStore.statesDictionary.keys), id: \.self) { name in
+                        Text(name).tag(DataStore.codeByName(name)!)
+                    }
+                }
+                .disabled(!searchZipCode.isEmpty)
+                
             }
-            .frame(width: 200)
+            .frame(width: 230)
             
-            Picker("Frequency: ", selection: $refreshInterval) {
-                ForEach(Frequency.allCases, id: \.id) { freq in
-                    Text(freq.timeDesc)
-                        .tag(freq)
-                }
-            }
-            .frame(width: 200)
-            .disabled(!autoRefreshEnabled)
+            Spacer()
+            
+            Group() {
+                Toggle("Auto Refresh", isOn: $autoRefreshEnabled)
+                Stepper("Refresh Interval: \(refreshInterval) min",
+                        value: $refreshInterval, in: 30...720)
+                .disabled(!autoRefreshEnabled)
+            }.frame(width: 200, alignment: .leading)
             
             Spacer()
         }
-        .frame(width: 270, height: 180)
+        .frame(width: 270, height: 300)
         Spacer()
     }
 }
