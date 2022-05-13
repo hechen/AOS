@@ -10,7 +10,6 @@ import Foundation
 struct TimeSlot: Codable {
     let formattedDate: String
     let formattedTimes: [String]
-    
     enum CodingKeys: String, CodingKey {
         case formattedDate = "date"
         case formattedTimes = "times"
@@ -20,8 +19,9 @@ struct TimeSlot: Codable {
 extension TimeSlot {
     // date: 2022-06-07
     // time: 13:00
+    // "2022-06-07 13:00"
     var dates: [Date] {
-        formattedTimes.compactMap { DataStore.dateFormatter.date(from: formattedDate + " " + $0) }
+        formattedTimes.compactMap { Utility.dateFormatter.date(from: formattedDate + " " + $0) }
     }
 }
 

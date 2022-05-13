@@ -44,7 +44,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .preferencesChangedSubject
             .filter { changedKeyPath in changedKeyPath == \Preferences.lastRefreshDate }
             .sink { [weak self] _ in
-                self?.refreshMenuItem.title = "Refresh (\(DataStore.dateFormatter.string(from: Preferences.standard.lastRefreshDate)))"
+                self?.refreshMenuItem.title = "Refresh (\(Utility.dateFormatter.string(from: Preferences.standard.lastRefreshDate)))"
             }
             .store(in: &subscriptions)
         
@@ -92,7 +92,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             title += "\(menuManager.ascManager.offices.count) Offices, "
             if let date = menuManager.ascManager.nearestTimeslot {
-                title += "Nearest time is \(DataStore.dateFormatter.string(from: date))"
+                title += "Nearest time is \(Utility.dateFormatter.string(from: date))"
             } else {
                 title += "No Available Slots"
             }
