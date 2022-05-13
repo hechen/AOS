@@ -48,7 +48,9 @@ struct PreferenceView: View {
             Group() {
                 Toggle("Auto Refresh", isOn: $autoRefreshEnabled)
                 Stepper("Refresh Interval: \(refreshInterval) min",
-                        value: $refreshInterval, in: 30...720)
+                        value: $refreshInterval,
+                        in: 30...720,
+                        step: 10)
                 .disabled(!autoRefreshEnabled)
             }.frame(width: 200, alignment: .leading)
             

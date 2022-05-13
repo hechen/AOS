@@ -23,7 +23,6 @@ final class PublisherObservableObject: ObservableObject {
     }
 }
 
-
 @propertyWrapper
 struct Preference<Value>: DynamicProperty {
     @ObservedObject private var preferencesObserver: PublisherObservableObject

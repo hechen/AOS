@@ -79,7 +79,7 @@ class MenuManager: NSObject, NSMenuDelegate {
         
         if ascManager.loading {
             let item = NSMenuItem()
-            let itemFrame = NSRect(x: 0, y: 0, width: 200, height: 40)
+            let itemFrame = NSRect(x: 0, y: 0, width: 240, height: 40)
             let view = RefreshingView(frame: itemFrame)
             item.view = view
             statusMenu.insertItem(item, at: index)
@@ -89,12 +89,12 @@ class MenuManager: NSObject, NSMenuDelegate {
         // not loading, there must be no state has been set up.
         guard !ascManager.offices.isEmpty else {
             let item = NSMenuItem()
-            item.title = "Select State first."
+            item.title = "Input ZIP or state."
             statusMenu.insertItem(item, at: index)
             return
         }
         
-        let itemFrame = NSRect(x: 0, y: 0, width: 200, height: 40)
+        let itemFrame = NSRect(x: 0, y: 0, width: 240, height: 40)
         for office in ascManager.offices {
             let item = NSMenuItem()
             let view = OfficeView(frame: itemFrame)

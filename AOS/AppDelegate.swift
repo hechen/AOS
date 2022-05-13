@@ -77,8 +77,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if menuManager.ascManager.offices.isEmpty {
             title += "No Available Offices"
         } else {
-            let date = menuManager.ascManager.nearestTimeslot ?? Date()
-            title += "\(menuManager.ascManager.offices.count) Offices, Nearest time is \(Self.dateFormatter.string(from: date))"
+            title += "\(menuManager.ascManager.offices.count) Offices, "
+            if let date = menuManager.ascManager.nearestTimeslot {
+                title += "Nearest time is \(Self.dateFormatter.string(from: date))"
+            } else {
+                title += "No Available Slots"
+            }
         }
         
         statusItem?.button?.title = title

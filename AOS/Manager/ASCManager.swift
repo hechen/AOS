@@ -57,7 +57,7 @@ class ASCManager: NSObject {
             }
             .store(in: &subscriptions)
     }
-    
+
     // MARK: - Timer
     func startTimer() {
         // in case timer is running.
@@ -74,7 +74,8 @@ class ASCManager: NSObject {
     }
     
     func refreshOffices() {
-        guard !Preferences.standard.selectedState.isEmpty, !Preferences.standard.searchZipCode.isEmpty else {
+        if Preferences.standard.selectedState.isEmpty, Preferences.standard.searchZipCode.isEmpty {
+            offices = []
             return
         }
         
@@ -106,23 +107,31 @@ class ASCManager: NSObject {
                 }
             }, receiveValue: { [weak self] centers in
                 self?.offices = centers
+                self?.notifyIfNeeded()
             })
             .store(in: &subscriptions)
     }
     
     // TODO: add observation
-    private func notifyIfNeeded(previous: [ASC], latest: [ASC]) {
+    private func notifyIfNeeded() {
         // the simplest way is to check equality...
+        guard !OfficeObserver.shared.officesToObserve.isEmpty else { return }
         
-        guard !latest.isEmpty else {
+        let needAlert = !offices.filter { office in
+            OfficeObserver.shared.officesToObserve.contains { observedOffice in
+                office.assignedServiceCenter == observedOffice.assignedServiceCenter
+            }
+        }.filter {
+            !$0.timeSlots.isEmpty
+        }.isEmpty
+        
+        guard needAlert else {
             return
         }
         
-#if DEBUG
         // check if user has some specific observation
         if reminder.newTimeSlotFound() == .alertFirstButtonReturn {
             NSWorkspace.shared.open(URL(string: "https://my.uscis.gov/appointmentscheduler-appointment/ca/en/office-search")!)
         }
-#endif
     }
 }
