@@ -91,6 +91,7 @@ class ASCManager: NSObject {
         var request = URLRequest(url: URL(string: urlString)!)
         request.httpMethod = "GET"
         
+        
         URLSession.shared.dataTaskPublisher(for: request)
             .handleEvents(receiveSubscription: { [weak self] _ in
                 self?.loading = true
@@ -105,7 +106,9 @@ class ASCManager: NSObject {
                 if case .failure(let err) = completion {
                     print("Fetch Centers Failed. Error: \(err)")
                 }
-            }, receiveValue: { [weak self] centers in
+            }, receiveValue: { [weak self] centers in                
+                Preferences.standard.lastRefreshDate = Date()
+                
                 self?.offices = centers
                 self?.notifyIfNeeded()
             })

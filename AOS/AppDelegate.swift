@@ -16,6 +16,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBOutlet weak var statusMenu: NSMenu!
     @IBOutlet weak var preferencesMenuItem: NSMenuItem!
+    @IBOutlet weak var refreshMenuItem: NSMenuItem!
+    
     
     var menuManager: MenuManager?
     
@@ -37,13 +39,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self?.updateMenuItems()
             }
             .store(in: &subscriptions)
+
+        Preferences.standard
+            .preferencesChangedSubject
+            .filter { changedKeyPath in changedKeyPath == \Preferences.lastRefreshDate }
+            .sink { [weak self] _ in
+                self?.refreshMenuItem.title = "Refresh (\(DataStore.dateFormatter.string(from: Preferences.standard.lastRefreshDate)))"
+            }
+            .store(in: &subscriptions)
         
         // first time, load data
         menuManager?.ascManager.refreshOffices()
     }
     var subscriptions = Set<AnyCancellable>()
     
-
+    
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
@@ -51,6 +61,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
     }
+    
+    
+    // MARK: - Actions
     
     @IBAction func didClickRefresh(_ sender: Any) {
         menuManager?.ascManager.refreshOffices()
@@ -67,7 +80,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         controller.showWindow(nil)
     }
     
-    func updateMenuItems() {
+    private func updateMenuItems() {
         guard let menuManager = menuManager else {
             return
         }
@@ -79,7 +92,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             title += "\(menuManager.ascManager.offices.count) Offices, "
             if let date = menuManager.ascManager.nearestTimeslot {
-                title += "Nearest time is \(Self.dateFormatter.string(from: date))"
+                title += "Nearest time is \(DataStore.dateFormatter.string(from: date))"
             } else {
                 title += "No Available Slots"
             }
@@ -91,11 +104,4 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         menuManager.updateMenuItems()
     }
-    
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd HH:mm"
-        return df
-    }()
 }
-

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
     </dependencies>
     <scenes>
@@ -52,6 +51,7 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="AOS" customModuleProvider="target">
                     <connections>
                         <outlet property="preferencesMenuItem" destination="h0B-rZ-MKd" id="BvO-bK-3XH"/>
+                        <outlet property="refreshMenuItem" destination="6zr-UV-3ru" id="RME-OS-SXq"/>
                         <outlet property="statusMenu" destination="uQy-DD-JDr" id="Ywh-Z5-bbl"/>
                     </connections>
                 </customObject>

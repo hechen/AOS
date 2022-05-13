@@ -15,15 +15,15 @@ struct PreferenceView: View {
     @Preference(\.searchZipCode) var searchZipCode
     
     var intProxy: Binding<Double>{
-            Binding<Double>(get: {
-                //returns the score as a Double
-                return Double(refreshInterval)
-            }, set: {
-                //rounds the double to an Int
-                print($0.description)
-                refreshInterval = Int($0)
-            })
-        }
+        Binding<Double>(get: {
+            //returns the score as a Double
+            return Double(refreshInterval)
+        }, set: {
+            //rounds the double to an Int
+            print($0.description)
+            refreshInterval = Int($0)
+        })
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -60,14 +60,14 @@ struct PreferenceView: View {
                 Toggle("Auto Refresh", isOn: $autoRefreshEnabled)
                 VStack(alignment: .leading) {
                     Text("Interval \(refreshInterval) Min: ")
-                    Slider(value: intProxy, in: 30...720) {
-                        } minimumValueLabel: {
-                            Text("30 Min")
-                        } maximumValueLabel: {
-                            Text("720 Min")
-                        } onEditingChanged: { _ in }
+                    Slider(value: intProxy, in: 10...60) {
+                    } minimumValueLabel: {
+                        Text("10 Min")
+                    } maximumValueLabel: {
+                        Text("60 Min")
+                    } onEditingChanged: { _ in }
                         .disabled(!autoRefreshEnabled)
-                }                
+                }
             }.frame(width: 250, alignment: .leading)
             
             Spacer()

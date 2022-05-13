@@ -116,12 +116,14 @@ final class Preferences {
     @UserDefault(PreferencesKeys.refreshInterval)
     var refreshInterval: Int = 30        // 30 Min by default
     
+    @UserDefault(PreferencesKeys.lastRefreshDate)
+    var lastRefreshDate: Date = Date()
+    
     private enum PreferencesKeys {
         static let searchZipCode = "SearchZipCode"
         static let selectedState = "SelectedState"
         static let autoRefreshEnabled = "AutoRefreshEnabled"
         static let refreshInterval = "RefreshInterval"
+        static let lastRefreshDate = "LastRefreshDate"
     }
 }
-
-
