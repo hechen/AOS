@@ -91,8 +91,9 @@ class ASCManager: NSObject {
         var request = URLRequest(url: URL(string: urlString)!)
         request.httpMethod = "GET"
         
-        
+    
         URLSession.shared.dataTaskPublisher(for: request)
+            .receive(on: DispatchQueue.main)
             .handleEvents(receiveSubscription: { [weak self] _ in
                 self?.loading = true
             }, receiveCompletion: { [weak self] _ in
@@ -110,12 +111,14 @@ class ASCManager: NSObject {
                 Preferences.standard.lastRefreshDate = Date()
                 
                 self?.offices = centers
+                
                 self?.notifyIfNeeded()
             })
             .store(in: &subscriptions)
     }
     
     // TODO: add observation
+    // MainActor
     private func notifyIfNeeded() {
         // the simplest way is to check equality...
         guard !OfficeObserver.shared.officesToObserve.isEmpty else { return }
