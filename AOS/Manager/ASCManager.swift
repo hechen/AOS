@@ -65,8 +65,8 @@ class ASCManager: NSObject {
         // refresh for the first time.
         refreshOffices()
     }
-
-
+    
+    
     // MARK: - Timer
     func startTimer() {
         // in case timer is running.
@@ -81,7 +81,7 @@ class ASCManager: NSObject {
         timerCancellable?.cancel()
         timerCancellable = nil
     }
-
+    
     private func refreshOffices() {
         if Preferences.standard.selectedState.isEmpty, Preferences.standard.searchZipCode.isEmpty {
             offices = []
@@ -96,11 +96,10 @@ class ASCManager: NSObject {
             let state = Preferences.standard.selectedState
             urlString = "https://my.uscis.gov/appointmentscheduler-appointment/field-offices/state/" + state
         }
-                
+        
         var request = URLRequest(url: URL(string: urlString)!)
         request.httpMethod = "GET"
         
-    
         URLSession.shared.dataTaskPublisher(for: request)
             .receive(on: DispatchQueue.main)
             .handleEvents(receiveSubscription: { [weak self] _ in
@@ -112,17 +111,15 @@ class ASCManager: NSObject {
             })
             .map(\.data)
             .decode(type: [ASC].self, decoder: JSONDecoder())
-            .sink(receiveCompletion: { completion in
-                if case .failure(let err) = completion {
-                    print("Fetch Centers Failed. Error: \(err)")
-                }
-            }, receiveValue: { [weak self] centers in                
-                Preferences.standard.lastRefreshDate = Date()
-                
-                self?.offices = centers
-                
-                self?.notifyIfNeeded()
-            })
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { [weak self] centers in
+                    Preferences.standard.lastRefreshDate = Date()
+                    
+                    self?.offices = centers
+                    
+                    self?.notifyIfNeeded()
+                })
             .store(in: &subscriptions)
     }
     
