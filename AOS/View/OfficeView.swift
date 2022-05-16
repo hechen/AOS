@@ -17,6 +17,10 @@ import Combine
  │ └──────┘ └────────────────────────────┘ │
  └─────────────────────────────────────────┘
  */
+fileprivate enum ObservationStatus: Int {
+    case observed = 1
+    case unobserved = 0
+}
 
 class OfficeView: NSView {
     var office: ASC?
@@ -28,7 +32,6 @@ class OfficeView: NSView {
     var observeButton: NSButton
     
     override init(frame frameRect: NSRect) {
-        // set up subviews
         let imageFrame = NSRect(x: 10, y: 10, width: 20, height: 20)
         imageView = NSImageView(frame: imageFrame)
         imageView.imageScaling = .scaleProportionallyUpOrDown
@@ -52,7 +55,7 @@ class OfficeView: NSView {
         infoLabel.isEditable = false
         infoLabel.font = NSFont.systemFont(ofSize: 11)
         
-        observeButton = NSButton(frame: NSRect(x: frameRect.maxX - 85, y: 4, width: 80, height: 30))
+        observeButton = NSButton(frame: NSRect(x: frameRect.maxX - 83, y: 4, width: 78, height: 30))
         observeButton.bezelStyle = .roundRect
         
         super.init(frame: frameRect)
@@ -63,7 +66,7 @@ class OfficeView: NSView {
         addSubview(observeButton)
         
         observeButton.target = self
-        observeButton.action = #selector(notify)
+        observeButton.action = #selector(didClickObserverButton)
     }
     
     required init?(coder: NSCoder) {
@@ -90,8 +93,27 @@ class OfficeView: NSView {
             let observed = OfficeObserver.shared.officesToObserve.contains {
                 $0.assignedServiceCenter == office.assignedServiceCenter
             }
-            observeButton.title = observed ? "Observed" : "Notify Me"
-            observeButton.isEnabled = !observed
+            
+            guard let observation = ObservationStatus(rawValue: observed ? 1 : 0) else {
+                return
+            }
+            switch observation {
+            case .observed:
+                observeButton.title =  "Unnofity Me"
+            case .unobserved:
+                observeButton.title = "Notify Me"
+            }
+            
+            observeButton.tag = observation.rawValue
+        }
+    }
+    
+    @objc
+    func didClickObserverButton() {
+        if observeButton.tag == 0 {
+            notify()
+        } else {
+            unnotify()
         }
     }
     
@@ -100,7 +122,13 @@ class OfficeView: NSView {
         NotificationCenter.default.post(name: .notifyWhenSlotsAvailable, object: office)
         
         // refresh UI
-        self.setNeedsDisplay(.infinite)
+        setNeedsDisplay(.infinite)
+    }
+    @objc
+    func unnotify() {
+        NotificationCenter.default.post(name: .unnotifyWhenSlotsAvailable, object: office)
+        
+        setNeedsDisplay(.infinite)
     }
 }
 
