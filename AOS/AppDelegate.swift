@@ -49,7 +49,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .store(in: &subscriptions)
         
         // first time, load data
-        menuManager?.ascManager.refreshOffices()
+        menuManager?.ascManager.refresh()
     }
     var subscriptions = Set<AnyCancellable>()
     
@@ -66,7 +66,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - Actions
     
     @IBAction func didClickRefresh(_ sender: Any) {
-        menuManager?.ascManager.refreshOffices()
+        menuManager?.ascManager.refresh()
     }
     
     @IBAction func didClickPreferences(_ sender: Any) {

@@ -9,8 +9,9 @@ import AppKit
 import UserNotifications
 
 class Reminder: NSObject {
-    func newTimeSlotFound() -> NSApplication.ModalResponse {
-        let message = "Found new timeslots on Application Center"
+    func newTimeSlotFound(_ offices: [ASC]) -> NSApplication.ModalResponse {
+        let centers = offices.map(\.centerDescription).joined(separator: ", ")        
+        let message = "Found new timeslots on \(centers)"
         let buttonTitles = ["Go to the website", "OK"]
         let response = openAlert(title: "TimeSlot Notification", message: message, buttonTitles: buttonTitles)
         return response

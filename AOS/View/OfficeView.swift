@@ -36,10 +36,10 @@ class OfficeView: NSView {
         imageView = NSImageView(frame: imageFrame)
         imageView.imageScaling = .scaleProportionallyUpOrDown
         
-        let titleFrame = NSRect(x: 40, y: 20, width: 110, height: 16)
+        let titleFrame = NSRect(x: 40, y: 20, width: 200, height: 16)
         titleLabel = NSTextField(frame: titleFrame)
         
-        let infoProgressFrame = NSRect(x: 40, y: 4, width: 110, height: 14)
+        let infoProgressFrame = NSRect(x: 40, y: 4, width: 250, height: 14)
         infoLabel = NSTextField(frame: infoProgressFrame)
         
         titleLabel = NSTextField(frame: titleFrame)
@@ -87,7 +87,12 @@ class OfficeView: NSView {
             titleLabel.stringValue = office.centerDescription
             titleLabel.textColor = color
             
-            infoLabel.stringValue = office.timeSlots.isEmpty ? "No available timeslot" : "\(office.timeSlots.count) timeslots"
+            if office.timeSlots.isEmpty {
+                infoLabel.stringValue = "No available timeslot"
+            } else {
+                infoLabel.stringValue = "\(office.timeSlots.count) timeslots, \(office.timeSlots.first!.formattedDate)"
+            }
+                        
             infoLabel.textColor = color
             
             let observed = OfficeObserver.shared.officesToObserve.contains {
@@ -99,7 +104,7 @@ class OfficeView: NSView {
             }
             switch observation {
             case .observed:
-                observeButton.title =  "Unnofity Me"
+                observeButton.title =  "Unnotify Me"
             case .unobserved:
                 observeButton.title = "Notify Me"
             }

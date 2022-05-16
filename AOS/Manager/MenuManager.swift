@@ -79,7 +79,7 @@ class MenuManager: NSObject, NSMenuDelegate {
         
         if ascManager.loading {
             let item = NSMenuItem()
-            let itemFrame = NSRect(x: 0, y: 0, width: 250, height: 40)
+            let itemFrame = NSRect(x: 0, y: 0, width: 300, height: 40)
             let view = RefreshingView(frame: itemFrame)
             item.view = view
             statusMenu.insertItem(item, at: index)
@@ -94,7 +94,7 @@ class MenuManager: NSObject, NSMenuDelegate {
             return
         }
         
-        let itemFrame = NSRect(x: 0, y: 0, width: 250, height: 40)
+        let itemFrame = NSRect(x: 0, y: 0, width: 300, height: 40)
         for office in ascManager.offices {
             let item = NSMenuItem()
             let view = OfficeView(frame: itemFrame)
