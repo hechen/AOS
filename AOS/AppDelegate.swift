@@ -65,6 +65,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // MARK: - Actions
     
+    // Challenge
+    @IBAction func showAbout(_ sender: Any) {
+      NSApp.activate(ignoringOtherApps: true)
+      NSApp.orderFrontStandardAboutPanel(nil)
+    }
+    
     @IBAction func didClickRefresh(_ sender: Any) {
         menuManager?.ascManager.refresh()
     }
